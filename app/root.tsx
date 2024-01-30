@@ -1,11 +1,16 @@
-import {
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-} from "@remix-run/react";
+import { Links, LiveReload, Meta, Outlet, Scripts, ScrollRestoration } from '@remix-run/react';
+import './tailwind.css';
+
+import { json, type LoaderFunctionArgs } from '@remix-run/node';
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  const url = new URL(request.url);
+  const search_string = url.searchParams.get('search_string');
+  if (!search_string) {
+    return json({ data: null });
+  }
+  return json({ data: search_string });
+};
 
 export default function App() {
   return (
@@ -17,7 +22,9 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <Outlet />
+        <div className="w-screen min-h-screen">
+          <Outlet />
+        </div>
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
